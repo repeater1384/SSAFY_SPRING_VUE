@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.train.model.mapper.CarMapper">
+	<select id="allList" resultType = "Car">
+		select * from car
+	</select>
+	
+	<insert id="regist" parameterType="Car">
+		insert into car values(#{number}, #{model},#{price},#{brand})
+	</insert>
+	
+	<insert id="regist2" parameterType="FileInfo">
+		insert into fileinfo values(#{number}, #{saveFolder},#{originFile},#{saveFile})
+	</insert>
+	
+	<select id = "detail" resultType="Car">
+		select * from car where number = ${number}
+	</select>
+</mapper>

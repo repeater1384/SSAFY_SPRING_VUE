@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      window.onload = async function () {
+        let list = await fetch("http://localhost:8080/rest/books");
+        let bookList = await list.json();
+        let table = books;
+        for (let book of bookList) {
+          let row = table.insertRow();
+          let cell = row.insertCell();
+          cell.innerHTML = book.isbn;
+          cell = row.insertCell();
+          cell.innerHTML = book.title;
+          cell = row.insertCell();
+          cell.innerHTML = book.author;
+          cell = row.insertCell();
+          cell.innerHTML = book.price;
+        }
+        console.log(table);
+        console.log(bookList);
+      };
+      function goInsertBook() {
+        location.href = "insertBook.html";
+      }
+    </script>
+  </head>
+  <body>
+    <table id="books">
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>저자</th>
+        <th>가격</th>
+      </tr>
+      <tbody></tbody>
+    </table>
+    <button onclick="goInsertBook()">책등록페이지</button>
+  </body>
+</html>

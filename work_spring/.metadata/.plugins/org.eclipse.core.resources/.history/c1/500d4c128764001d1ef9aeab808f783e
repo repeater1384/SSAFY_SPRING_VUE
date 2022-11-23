@@ -1,0 +1,46 @@
+package com.ssafy.webex;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+import java.util.Date;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class JWTMain {
+	public static void main(String[] args) throws UnsupportedEncodingException, InterruptedException {
+		
+		final int EXPIRE_MINUTE = 1;
+		final String SECRET_KEY = "ssafy";
+		final String SECRET_KEY2 = "Ssafy";
+		String token = Jwts.builder()
+				//header
+				.setHeaderParam("typ", "JWT")
+				.setHeaderParam("alg", "HS256")
+				//payload
+				.claim("id","qkrdlfrb123")
+				.claim("name", "박일규")
+				.setExpiration(new Date(System.currentTimeMillis()+1000*3))
+				.signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes("UTF-8"))
+				.compact();
+
+		
+//		String[] splittedToken = token.split("\\.");
+//		for (String tok: splittedToken) {
+//			log.debug("토큰 : {}",tok);
+//		}
+		
+//		log.debug("인코딩: {}",token.split("\\.")[1]);
+//		log.debug("디코딩 : {}",new String(Base64.getDecoder().decode(token.split("\\.")[1])));
+		
+		Jws<Claims> claims = Jwts.parser().setSigningKey("ssafy".getBytes("UTF-8")).parseClaimsJws(token);
+		log.debug(claims.toString());
+		Thread.sleep(5000);
+		claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes("UTF-8")).parseClaimsJws(token);
+		log.debug(claims.toString());
+	}
+}

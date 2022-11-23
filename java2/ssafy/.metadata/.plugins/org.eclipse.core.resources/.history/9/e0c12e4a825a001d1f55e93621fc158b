@@ -1,0 +1,57 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int L;
+	static int answer;
+
+	public static void main(String[] args) throws IOException {
+		// 입력을 위한 코드
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+
+		// 테스트케이스의 수를 입력받습니다.
+		// V,P,L 를 입력받습니다.
+		st = new StringTokenizer(br.readLine());
+		int V = Integer.parseInt(st.nextToken());
+		int P = Integer.parseInt(st.nextToken());
+		L = Integer.parseInt(st.nextToken());
+
+		// 마을의 위치를 입력받습니다.
+		st = new StringTokenizer(br.readLine());
+		int[] arr = new int[V];
+		for (int i = 0; i < V; i++)
+			arr[i] = Integer.parseInt(st.nextToken());
+
+		// 안될거 같지만.. V개에서 P개 뽑아보고, 무식하게 계산해봅니다.
+		answer = Integer.MAX_VALUE;
+		comb(0, 0, new int[P], arr, P);
+		System.out.println(answer);
+	}
+
+	static void comb(int depth, int start, int[] result, int[] arr, int r) {
+		if (depth == r) {
+			int cost = 0;
+			for (int pos1 : arr) {
+				int cur = Integer.MAX_VALUE;
+				for (int pos2 : result) {
+					cur = Math.min(cur, getDis(pos1, pos2));
+				}
+				cost += cur;
+			}
+			answer = Math.min(answer, cost);
+			return;
+		}
+		for (int i = start; i < arr.length; i++) {
+			result[depth] = arr[i];
+			comb(depth + 1, i + 1, result, arr, r);
+		}
+	}
+
+	static int getDis(int a, int b) {
+		return Math.min(Math.abs(a - b), L - Math.abs(a - b));
+	}
+
+}

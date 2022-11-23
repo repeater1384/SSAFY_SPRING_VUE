@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.webex.model.mapper.WorldMapper">
+	<!-- 도시정보를 등록하고 등록된 도시의 ID값 가져오기 -->
+	<insert id="insertCity" parameterType="City">
+		insert into city (name, countryCode, district, population)
+		values
+		(#{name}, #{countryCode}, #{district}, #{population})
+
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			select
+			last_insert_id()
+		</selectKey>
+		<!-- <selectKey keyProperty="id" resultType="City" order="AFTER"> select 
+			id from city order by id desc limit 1 </selectKey> -->
+	</insert>
+
+	<!-- 각 나라와 해당 나라의 모든 언어 정보 조회 -->
+	<select id="selectCoCl" resultMap="CoCl">
+		select 
+		co.code,
+		co.name co_name,
+		co.continent,
+		co.capital,
+		cl.countrycode cl_countryCode,
+		cl.language,
+		cl.isOfficial,
+		cl.percentage
+		
+		from country co
+		left join
+		countryLanguage cl
+		on co.code = cl.countryCode
+	</select>
+
+	<resultMap type="Country" id="CoCl">
+		<!-- <id>, <result> 해당 컬럼의 정보를 어떤 속성에 담을지 정의 -->
+		<id column="code" property="code" />
+		<result column="co_name" property="name" />
+		<result column="contient" property="continent" />
+		<result column="capital" property="capital" />
+
+		<!-- 컬렉션 : 속성의 멤버가 List인 경우 -->
+		<!-- javaType :collection에 담을 객체의 타입 -->
+		<collection property="languages" javaType="list" ofType="CountryLanguage">
+			<id column="cl_countryCode" property="countryCode" />
+			<id column="language" property="language" />
+			<result column="isOfficial" property="isOfficial" />
+			<result column="percentage" property="percentage" />
+		</collection>
+	</resultMap>
+
+
+</mapper>

@@ -1,0 +1,16 @@
+package com.ssafy.webex;
+
+import io.jsonwebtoken.Jwts;
+
+public class JWTMain {
+	public static void main(String[] args) {
+		String token = Jwts.builder()
+				//header
+				.setHeaderParam("typ", "JWT")
+				.setHeaderParam("alg", "HS256")
+				//payload
+				.claim("id","qkrdlfrb123")
+				.claim("name", "박일규")
+				.toString();
+	}
+}
